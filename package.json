@@ -1,0 +1,27 @@
+{
+  "name": "cli_employee-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EricNg314/CLI_Employee-Manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EricNg314/CLI_Employee-Manager/issues"
+  },
+  "homepage": "https://github.com/EricNg314/CLI_Employee-Manager#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "inquirer": "^8.2.2",
+    "mysql2": "^2.3.3"
+  }
+}
