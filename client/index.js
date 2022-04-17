@@ -90,6 +90,7 @@ const addEmployee = async () => {
   console.log('addEmployee employeeName: ', employeeName)
   console.log('addEmployee department: ', department)
   console.log('addEmployee role: ', role)
+  console.log('addEmployee manager: ', manager)
 
   // try {
   //   const url = process.env.DB_URL || 'http://localhost:3001';
@@ -252,7 +253,7 @@ const chooseDepartment = async () => {
         {
           name: "deptName",
           type: "list",
-          message: "What department for this role?",
+          message: "Employee's department for this role?",
           choices: deptNames,
           validate: (answer) => {
             if (answer) {
@@ -265,8 +266,9 @@ const chooseDepartment = async () => {
       ])
       .then(async (data) => {
         const { deptName } = data;
-        selectedDept.id = deptName.split(": ")[0];
-        selectedDept.name = deptName.split(": ")[1];
+        const deptInfoArr = deptName.split(": ")
+        selectedDept.id = deptInfoArr[0];
+        selectedDept.name = deptInfoArr[1];
       });
 
     return selectedDept;
@@ -291,7 +293,7 @@ const chooseRoles = async (department) => {
         {
           name: "roleName",
           type: "list",
-          message: `What role for ${department.name}?`,
+          message: `Employee's role for ${department.name}?`,
           choices: roleNames,
           validate: (answer) => {
             if (answer) {
@@ -304,8 +306,9 @@ const chooseRoles = async (department) => {
       ])
       .then(async (data) => {
         const { roleName } = data;
-        selectedRole.id = roleName.split(": ")[0];
-        selectedRole.title = roleName.split(": ")[1];
+        const roleInfoArr = roleName.split(": ")
+        selectedRole.id = roleInfoArr[0];
+        selectedRole.title = roleInfoArr[1];
       });
 
     return selectedRole;
@@ -323,15 +326,15 @@ const chooseManager = async (department) => {
       method: 'GET'
     })
     const managerList = response.data.data
-    const managerNames = managerList.map(managerInfo => `${managerInfo['id']}: ${managerInfo['title']}`);
+    const managerNames = managerList.map(managerInfo => `${managerInfo['id']}: ${managerInfo['last_name']}, ${managerInfo['first_name']}`);
     managerNames.push('N/A');
-    
+
     await inquirer
       .prompt([
         {
           name: "managerName",
           type: "list",
-          message: `What manager for ${department.name}?`,
+          message: `Employee's manager for ${department.name}?`,
           choices: managerNames,
           validate: (answer) => {
             if (answer) {
@@ -344,8 +347,18 @@ const chooseManager = async (department) => {
       ])
       .then(async (data) => {
         const { managerName } = data;
-        selectedManager.id = managerName.split(": ")[0];
-        selectedManager.title = managerName.split(": ")[1];
+
+        if(managerName !== "N/A") {
+          const managerInfoArr = managerName.split(": ");
+          const managerNameArr = managerInfoArr[1].split(", ");
+          selectedManager.id = managerInfoArr[0];
+          selectedManager.first_name = managerNameArr[1];
+          selectedManager.last_name = managerNameArr[0];
+        } else {
+          selectedManager.id = null;
+          selectedManager.first_name = null;
+          selectedManager.last_name = null;
+        }
       });
 
     return selectedManager;
