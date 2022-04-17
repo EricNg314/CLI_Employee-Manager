@@ -5,7 +5,6 @@ async function initializeApp() {
   console.log("Thank you for using CLI_Employee-Manager.")
 }
 
-
 const managerMenu = async () => {
   let appIsRunning = true;
   while (appIsRunning === true) {
