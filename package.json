@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/EricNg314/CLI_Employee-Manager#readme",
   "dependencies": {
+    "axios": "^0.26.1",
+    "cli-table3": "^0.6.2",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "inquirer": "^8.2.2",
