@@ -267,7 +267,7 @@ const chooseRoles = async (department) => {
         selectedRole.name = roleName.split(": ")[1];
       });
 
-    return selectedDept;
+    return selectedRole;
   } catch (err) {
     console.error(err);
   }
