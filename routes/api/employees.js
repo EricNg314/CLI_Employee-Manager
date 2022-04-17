@@ -13,7 +13,7 @@ router.get('/employees/viewAll', async function(req,res) {
     console.log("success")
     res.json({
       message:'success',
-      data: info
+      data: info.response
     });
   }
 })

@@ -1,4 +1,6 @@
 const inquirer = require("inquirer");
+const axios = require("axios");
+const Table = require('cli-table3');
 
 async function initializeApp() {
   await managerMenu();
@@ -55,7 +57,28 @@ const managerMenu = async () => {
 }
 
 const viewAllEmployees = async () => {
-  console.log('Viewing new request.')
+  try {
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = '/api/employees/viewAll'
+    const response = await axios.get(`${url}${route}`, {
+      method: 'GET'
+    })
+    // console.log('response: ', response)
+    // console.log('response.data.data: ', response.data.data)
+    const headers = Object.keys(response.data.data[0])
+    const table = new Table({
+      head: headers
+    });
+    response.data.data.forEach(row => {
+      // console.log('row', row)
+      const rowValues = Object.keys(row).map((key) => row[key])
+      table.push(rowValues);
+    });
+    console.log(table.toString())
+  } catch (err) {
+    console.error(err);
+  }
+
 }
 
 
