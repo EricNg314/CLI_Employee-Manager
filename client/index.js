@@ -82,118 +82,159 @@ const viewAllEmployees = async () => {
 }
 
 const addEmployee = async () => {
-  let department = await chooseDepartment()
-  let role = await chooseRoles(department);
-  let managerList = [];
-  // console.log('addEmployee department: ', department);
-  console.log('addEmployee role: ', role);
+  const employeeName = await promptEmployeeInfo();
+  const department = await chooseDepartment()
+  const role = await chooseRoles(department);
+  const manager = await chooseManager(department);
+
+  console.log('addEmployee employeeName: ', employeeName)
+  console.log('addEmployee department: ', department)
+  console.log('addEmployee role: ', role)
+
+  // try {
+  //   const url = process.env.DB_URL || 'http://localhost:3001';
+  //   const route = '/api/employees/viewAll'
+  //   const response = await axios.get(`${url}${route}`, {
+  //     method: 'GET'
+  //   })
+  //   // console.log('response: ', response)
+  //   // console.log('response.data.data: ', response.data.data)
+  //   const headers = Object.keys(response.data.data[0])
+  //   const table = new Table({
+  //     head: headers
+  //   });
+  //   response.data.data.forEach(row => {
+  //     // console.log('row', row)
+  //     const rowValues = Object.keys(row).map((key) => row[key])
+  //     table.push(rowValues);
+  //   });
+  //   console.log(table.toString())
+  // } catch (err) {
+  //   console.error(err);
+  // }
 
 
-  try {
-    const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = '/api/employees/viewAll'
-    const response = await axios.get(`${url}${route}`, {
-      method: 'GET'
-    })
-    // console.log('response: ', response)
-    // console.log('response.data.data: ', response.data.data)
-    const headers = Object.keys(response.data.data[0])
-    const table = new Table({
-      head: headers
-    });
-    response.data.data.forEach(row => {
-      // console.log('row', row)
-      const rowValues = Object.keys(row).map((key) => row[key])
-      table.push(rowValues);
-    });
-    console.log(table.toString())
-  } catch (err) {
-    console.error(err);
-  }
 
-
-
-  await inquirer
-  .prompt([
-    {
-      name: "firstName",
-      type: "input",
-      message: "First Name:",
-      validate: (answer) => {
-        if (answer) {
-          return true;
-        } else {
-          console.log("Employee's First Name.");
-        }
-      }
-    },
-    {
-      name: "lastName",
-      type: "input",
-      message: "Last Name:",
-      validate: (answer) => {
-        if (answer) {
-          return true;
-        } else {
-          console.log("Employee's Last Name.");
-        }
-      }
-    },
-    {
-      name: "managerName",
-      type: "input",
-      message: "Manager Name:",
-      validate: (answer) => {
-        if (answer) {
-          return true;
-        } else {
-          console.log("Manager Name?");
-        }
-      }
-    },
-    {
-      name: "role",
-      type: "input",
-      message: "Role:",
-      validate: (answer) => {
-        if (answer) {
-          return true;
-        } else {
-          console.log("Employee's Role?");
-        }
-      }
-    },
-  ])
-  .then(async (data) => {
-    const { firstName, lastName, managerName, role } = data;
-    try {
-      const body = {
-        firstName, lastName, managerName, role
-      }
-      const url = process.env.DB_URL || 'http://localhost:3001';
-      const route = '/api/employees/add'
-      const response = await axios.get(`${url}${route}`, {
-        method: 'POST'
-      })
-      // console.log('response: ', response)
-      // console.log('response.data.data: ', response.data.data)
-      const headers = Object.keys(response.data.data[0])
-      const table = new Table({
-        head: headers
-      });
-      response.data.data.forEach(row => {
-        // console.log('row', row)
-        const rowValues = Object.keys(row).map((key) => row[key])
-        table.push(rowValues);
-      });
-      console.log(table.toString())
-    } catch (err) {
-      console.error(err);
-    }
+  // await inquirer
+  // .prompt([
+  //   {
+  //     name: "firstName",
+  //     type: "input",
+  //     message: "First Name:",
+  //     validate: (answer) => {
+  //       if (answer) {
+  //         return true;
+  //       } else {
+  //         console.log("Employee's First Name.");
+  //       }
+  //     }
+  //   },
+  //   {
+  //     name: "lastName",
+  //     type: "input",
+  //     message: "Last Name:",
+  //     validate: (answer) => {
+  //       if (answer) {
+  //         return true;
+  //       } else {
+  //         console.log("Employee's Last Name.");
+  //       }
+  //     }
+  //   },
+  //   {
+  //     name: "managerName",
+  //     type: "input",
+  //     message: "Manager Name:",
+  //     validate: (answer) => {
+  //       if (answer) {
+  //         return true;
+  //       } else {
+  //         console.log("Manager Name?");
+  //       }
+  //     }
+  //   },
+  //   {
+  //     name: "role",
+  //     type: "input",
+  //     message: "Role:",
+  //     validate: (answer) => {
+  //       if (answer) {
+  //         return true;
+  //       } else {
+  //         console.log("Employee's Role?");
+  //       }
+  //     }
+  //   },
+  // ])
+  // .then(async (data) => {
+  //   const { firstName, lastName, managerName, role } = data;
+  //   try {
+  //     const body = {
+  //       firstName, lastName, managerName, role
+  //     }
+  //     const url = process.env.DB_URL || 'http://localhost:3001';
+  //     const route = '/api/employees/add'
+  //     const response = await axios.get(`${url}${route}`, {
+  //       method: 'POST'
+  //     })
+  //     // console.log('response: ', response)
+  //     // console.log('response.data.data: ', response.data.data)
+  //     const headers = Object.keys(response.data.data[0])
+  //     const table = new Table({
+  //       head: headers
+  //     });
+  //     response.data.data.forEach(row => {
+  //       // console.log('row', row)
+  //       const rowValues = Object.keys(row).map((key) => row[key])
+  //       table.push(rowValues);
+  //     });
+  //     console.log(table.toString())
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
   
-  });
+  // });
 
 }
+
+const promptEmployeeInfo = async () => {
+  let employeeInfo = {}
+  await inquirer
+      .prompt([
+        {
+          name: "firstName",
+          type: "input",
+          message: "First Name:",
+          validate: (answer) => {
+            if (answer) {
+              return true;
+            } else {
+              console.log("Employee's First Name.");
+            }
+          }
+        },
+        {
+          name: "lastName",
+          type: "input",
+          message: "Last Name:",
+          validate: (answer) => {
+            if (answer) {
+              return true;
+            } else {
+              console.log("Employee's Last Name.");
+            }
+          }
+        }
+      ])
+      .then(async (data) => {
+        const { firstName, lastName } = data;
+        employeeInfo.firstName = firstName;
+        employeeInfo.lastName = lastName;
+      });
+
+    return employeeInfo;
+}
+
 
 const chooseDepartment = async () => {
   try {
@@ -238,12 +279,12 @@ const chooseRoles = async (department) => {
   try {
     let selectedRole = {};
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = `/api/employees/roles/?departmentId=${department.id}`
+    const route = `/api/employees/roles/byDepartment?id=${department.id}`
     const response = await axios.get(`${url}${route}`, {
       method: 'GET'
     })
     const roleList = response.data.data
-    const roleNames = roleList.map(roleInfo => `${roleInfo['id']}: ${roleInfo['name']}`);
+    const roleNames = roleList.map(roleInfo => `${roleInfo['id']}: ${roleInfo['title']}`);
     
     await inquirer
       .prompt([
@@ -264,10 +305,50 @@ const chooseRoles = async (department) => {
       .then(async (data) => {
         const { roleName } = data;
         selectedRole.id = roleName.split(": ")[0];
-        selectedRole.name = roleName.split(": ")[1];
+        selectedRole.title = roleName.split(": ")[1];
       });
 
     return selectedRole;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const chooseManager = async (department) => {
+  try {
+    let selectedManager = {};
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = `/api/employees/byDepartment?id=${department.id}`
+    const response = await axios.get(`${url}${route}`, {
+      method: 'GET'
+    })
+    const managerList = response.data.data
+    const managerNames = managerList.map(managerInfo => `${managerInfo['id']}: ${managerInfo['title']}`);
+    managerNames.push('N/A');
+    
+    await inquirer
+      .prompt([
+        {
+          name: "managerName",
+          type: "list",
+          message: `What manager for ${department.name}?`,
+          choices: managerNames,
+          validate: (answer) => {
+            if (answer) {
+              return true;
+            } else {
+              console.log("Please select a manager.");
+            }
+          }
+        }
+      ])
+      .then(async (data) => {
+        const { managerName } = data;
+        selectedManager.id = managerName.split(": ")[0];
+        selectedManager.title = managerName.split(": ")[1];
+      });
+
+    return selectedManager;
   } catch (err) {
     console.error(err);
   }
