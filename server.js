@@ -18,6 +18,7 @@ app.use('/api', apiRoutes);
 
 // A default response for requests not found.
 app.use((req,res) => {
+  console.error(`Route not found: ${req.originalUrl}`)
   res.status(404).end()
 })
 
