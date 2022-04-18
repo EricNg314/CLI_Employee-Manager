@@ -168,6 +168,32 @@ const addDepartment = async () => {
   }
 }
 
+const updateEmployee = async () => {
+  const employeeName = await promptEmployeeInfo();
+  const department = await chooseDepartment()
+  const role = await chooseRoles(department);
+  const manager = await chooseManager(department);
+
+  try {
+    const bodyInfo = {
+      first_name: employeeName.first_name,
+      last_name: employeeName.last_name,
+      manager_id: manager.id,
+      manager_name: manager.first_name + " " + manager.last_name,
+      role_id: role.id,
+      role_title: role.title
+    }
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = '/api/employees/add'
+    const response = await axios.post(`${url}${route}`, {
+      ...bodyInfo
+    })
+    console.log(response.data.data.message)
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 const promptEmployeeInfo = async () => {
   let employeeInfo = {}
   await inquirer
