@@ -49,7 +49,7 @@ const managerMenu = async () => {
         } else if(task == 'Update Employee Role'){
           await viewAllEmployees();
         } else if(task == 'View All Roles'){
-          await viewAllEmployees();
+          await viewAllRoles();
         } else if(task == 'View All Departments'){
           await viewAllEmployees();
         } else if(task == 'Add Department'){
@@ -84,7 +84,28 @@ const viewAllEmployees = async () => {
   } catch (err) {
     console.error(err);
   }
+}
 
+const viewAllRoles = async () => {
+  try {
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = '/api/employees/roles/viewAll'
+    const response = await axios.get(`${url}${route}`, {
+      method: 'GET'
+    })
+    const headers = Object.keys(response.data.data[0])
+    const table = new Table({
+      head: headers
+    });
+    response.data.data.forEach(row => {
+      // console.log('row', row)
+      const rowValues = Object.keys(row).map((key) => row[key])
+      table.push(rowValues);
+    });
+    console.log(table.toString())
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 const addEmployee = async () => {
@@ -153,7 +174,6 @@ const promptEmployeeInfo = async () => {
 
     return employeeInfo;
 }
-
 
 const chooseDepartment = async () => {
   try {

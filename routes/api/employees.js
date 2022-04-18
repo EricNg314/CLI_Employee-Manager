@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { getAllEmployees, getAllDepartments, getAllRolesByDept, getAllEmployeesByDept, addEmployee } = require('../../lib/employees')
+const { getAllEmployees, getAllDepartments, getAllRolesByDept, getAllEmployeesByDept, addEmployee, getAllRoles } = require('../../lib/employees')
 
 router.get('/employees/viewAll', async function(req,res) {
   console.log('entered route /api/employees/viewAll')
@@ -35,6 +35,23 @@ router.get('/employees/departments/all', async function(req,res) {
   }
 })
 
+router.get('/employees/roles/viewAll', async function(req,res) {
+  console.log('entered route /api/roles/viewAll')
+  const info = await getAllRoles();
+  // console.log('info')
+  console.log('info from getAllRoles:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: info.response
+    });
+  }
+})
+
 router.get('/employees/roles/byDepartment', async function(req,res) {
   console.log('entered route /api/employees/roles/byDepartment')
   console.log('req.query.id: ', req.query.id)
@@ -53,7 +70,6 @@ router.get('/employees/roles/byDepartment', async function(req,res) {
   }
 })
 
-// TODO: Create get employees by department route.
 router.get('/employees/byDepartment', async function(req,res) {
   console.log('entered route /api/employees/byDepartment')
   console.log('req.query.id: ', req.query.id)
