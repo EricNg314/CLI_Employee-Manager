@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const { getAllEmployees, getAllDepartments, getAllRolesByDept, getAllEmployeesByDept, addEmployee, getAllRoles } = require('../../lib/employees')
+const { getAllEmployees, getAllDepartments, getAllRolesByDept, getAllEmployeesByDept, addEmployee, getAllRoles, addDepartment } = require('../../lib/employees')
 
+// Get all employees.
 router.get('/employees/viewAll', async function(req,res) {
   console.log('entered route /api/employees/viewAll')
   const info = await getAllEmployees();
@@ -93,6 +94,25 @@ router.post('/employees/add', async function(req,res) {
   console.log('req.body: ', req.body)
   const info = await addEmployee(req.body);
   console.log('info from addEmployee:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: {
+        message: `Added ${req.body.first_name} ${req.body.last_name} to ${req.body.manager_name} as ${req.body.role_title}`
+      }
+    });
+  }
+})
+
+router.post('/employees/department/add', async function(req,res) {
+  console.log('entered route /api/employees/department/add')
+  console.log('req.body: ', req.body)
+  const info = await addDepartment(req.body);
+  console.log('info from addDepartment:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
     res.status(500).json({error: info})

@@ -53,11 +53,10 @@ const managerMenu = async () => {
         } else if(task == 'View All Departments'){
           await viewAllDepartments();
         } else if(task == 'Add Department'){
-          await viewAllEmployees();
+          await addDepartment();
         } else if(task == 'Quit'){
           appIsRunning = false;
         }
-        // console.log('appIsRunning? ', appIsRunning)
       });
     }
 }
@@ -159,6 +158,27 @@ const addEmployee = async () => {
   }
 }
 
+const addDepartment = async () => {
+  const department = await promptDepartmentInfo()
+
+  //   const { firstName, lastName, managerName, role } = data;
+  try {
+    const bodyInfo = {
+      department_name: department.department_name
+    }
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = '/api/employees/department/add'
+    const response = await axios.post(`${url}${route}`, {
+      ...bodyInfo
+    })
+    console.log(response.data.data.message)
+    // console.log('response.data.data: ', response.data.data)
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 const promptEmployeeInfo = async () => {
   let employeeInfo = {}
   await inquirer
@@ -166,24 +186,24 @@ const promptEmployeeInfo = async () => {
         {
           name: "firstName",
           type: "input",
-          message: "First Name:",
+          message: "Employee's First Name:",
           validate: (answer) => {
             if (answer) {
               return true;
             } else {
-              console.log("Employee's First Name.");
+              console.log("Please add Employee's First Name.");
             }
           }
         },
         {
           name: "lastName",
           type: "input",
-          message: "Last Name:",
+          message: "Employee's Last Name:",
           validate: (answer) => {
             if (answer) {
               return true;
             } else {
-              console.log("Employee's Last Name.");
+              console.log("Please add Employee's Last Name.");
             }
           }
         }
@@ -195,6 +215,30 @@ const promptEmployeeInfo = async () => {
       });
 
     return employeeInfo;
+}
+
+const promptDepartmentInfo = async () => {
+  let departmentInfo = {}
+  await inquirer
+    .prompt([
+      {
+        name: "departmentName",
+        type: "input",
+        message: "Department Name:",
+        validate: (answer) => {
+          if (answer) {
+            return true;
+          } else {
+            console.log("Please add Department Name.");
+          }
+        }
+      },
+    ])
+    .then(async (data) => {
+      const { departmentName } = data;
+      departmentInfo.department_name = departmentName;
+    });
+    return departmentInfo;
 }
 
 const chooseDepartment = async () => {
