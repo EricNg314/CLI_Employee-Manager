@@ -68,14 +68,11 @@ const viewAllEmployees = async () => {
     const response = await axios.get(`${url}${route}`, {
       method: 'GET'
     })
-    // console.log('response: ', response)
-    // console.log('response.data.data: ', response.data.data)
     const headers = Object.keys(response.data.data[0])
     const table = new Table({
       head: headers
     });
     response.data.data.forEach(row => {
-      // console.log('row', row)
       const rowValues = Object.keys(row).map((key) => row[key])
       table.push(rowValues);
     });
@@ -97,7 +94,6 @@ const viewAllRoles = async () => {
       head: headers
     });
     response.data.data.forEach(row => {
-      // console.log('row', row)
       const rowValues = Object.keys(row).map((key) => row[key])
       table.push(rowValues);
     });
@@ -119,7 +115,6 @@ const viewAllDepartments = async () => {
       head: headers
     });
     response.data.data.forEach(row => {
-      // console.log('row', row)
       const rowValues = Object.keys(row).map((key) => row[key])
       table.push(rowValues);
     });
@@ -135,7 +130,6 @@ const addEmployee = async () => {
   const role = await chooseRoles(department);
   const manager = await chooseManager(department);
 
-  //   const { firstName, lastName, managerName, role } = data;
   try {
     const bodyInfo = {
       first_name: employeeName.first_name,
@@ -151,8 +145,6 @@ const addEmployee = async () => {
       ...bodyInfo
     })
     console.log(response.data.data.message)
-    // console.log('response.data.data: ', response.data.data)
-
   } catch (err) {
     console.error(err);
   }
@@ -161,7 +153,6 @@ const addEmployee = async () => {
 const addDepartment = async () => {
   const department = await promptDepartmentInfo()
 
-  //   const { firstName, lastName, managerName, role } = data;
   try {
     const bodyInfo = {
       department_name: department.department_name
@@ -172,8 +163,6 @@ const addDepartment = async () => {
       ...bodyInfo
     })
     console.log(response.data.data.message)
-    // console.log('response.data.data: ', response.data.data)
-
   } catch (err) {
     console.error(err);
   }
