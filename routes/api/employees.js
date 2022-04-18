@@ -1,9 +1,35 @@
 const router = require('express').Router();
-const { getAllEmployees, getAllDepartments, getAllRolesByDept, getAllEmployeesByDept, addEmployee, getAllRoles, addDepartment } = require('../../lib/employees')
+const { 
+  viewAllEmployees,
+  getAllEmployees,
+  getAllDepartments,
+  getAllRolesByDept,
+  getAllEmployeesByDept, 
+  addEmployee, 
+  updateEmployee,
+  getAllRoles, 
+  addDepartment } = require('../../lib/employees')
 
-// Get all employees.
+// viewAll route includes details full details.
 router.get('/employees/viewAll', async function(req,res) {
   console.log('entered route /api/employees/viewAll')
+  const info = await viewAllEmployees();
+  // console.log('info')
+  console.log('info from viewAllEmployees:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: info.response
+    });
+  }
+})
+
+router.get('/employees/all', async function(req,res) {
+  console.log('entered route /api/employees/all')
   const info = await getAllEmployees();
   // console.log('info')
   console.log('info from getAllEmployees:', info)
@@ -103,6 +129,25 @@ router.post('/employees/add', async function(req,res) {
       message:'success',
       data: {
         message: `Added ${req.body.first_name} ${req.body.last_name} to ${req.body.manager_name} as ${req.body.role_title}`
+      }
+    });
+  }
+})
+
+router.post('/employees/update', async function(req,res) {
+  console.log('entered route /api/employees/update')
+  console.log('req.body: ', req.body)
+  const info = await updateEmployee(req.body);
+  console.log('info from updateEmployee:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: {
+        message: `Updated ${req.body.first_name} ${req.body.last_name} as ${req.body.role_title}`
       }
     });
   }

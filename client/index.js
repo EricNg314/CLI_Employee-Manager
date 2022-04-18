@@ -10,7 +10,12 @@ async function initializeApp() {
   
   ----------------------------`)
   await managerMenu();
-  console.log("Thank you for using CLI_Employee-Manager.")
+  console.log(`
+  ----------------------------
+  
+      Thank you for using CLI_Employee-Manager.
+  
+  ----------------------------`)
 }
 
 const managerMenu = async () => {
@@ -47,7 +52,7 @@ const managerMenu = async () => {
         } else if(task == 'Add Employee'){
           await addEmployee();
         } else if(task == 'Update Employee Role'){
-          await viewAllEmployees();
+          await updateEmployee();
         } else if(task == 'View All Roles'){
           await viewAllRoles();
         } else if(task == 'View All Departments'){
@@ -169,22 +174,20 @@ const addDepartment = async () => {
 }
 
 const updateEmployee = async () => {
-  const employeeName = await promptEmployeeInfo();
-  const department = await chooseDepartment()
+  const employee = await chooseEmployee();
+  const department = await chooseDepartment();
   const role = await chooseRoles(department);
-  const manager = await chooseManager(department);
 
   try {
     const bodyInfo = {
-      first_name: employeeName.first_name,
-      last_name: employeeName.last_name,
-      manager_id: manager.id,
-      manager_name: manager.first_name + " " + manager.last_name,
+      employee_id: employee.id,
+      first_name: employee.first_name,
+      last_name: employee.last_name,
       role_id: role.id,
       role_title: role.title
     }
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = '/api/employees/add'
+    const route = '/api/employees/update'
     const response = await axios.post(`${url}${route}`, {
       ...bodyInfo
     })
@@ -254,6 +257,54 @@ const promptDepartmentInfo = async () => {
       departmentInfo.department_name = departmentName;
     });
     return departmentInfo;
+}
+
+const chooseEmployee = async () => {
+  try {
+    let selectedEmployee = {};
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = '/api/employees/all'
+    const response = await axios.get(`${url}${route}`, {
+      method: 'GET'
+    })
+    const employeeList = response.data.data
+    const employeeNames = employeeList.map(employeeInfo => `${employeeInfo['id']}: ${employeeInfo['last_name']}, ${employeeInfo['first_name']}`);
+    
+    await inquirer
+      .prompt([
+        {
+          name: "employeeName",
+          type: "list",
+          message: "Update which employee?",
+          choices: employeeNames,
+          validate: (answer) => {
+            if (answer) {
+              return true;
+            } else {
+              console.log("Please select a employee.");
+            }
+          }
+        }
+      ])
+      .then(async (data) => {
+        const { employeeName } = data;
+        if(employeeName !== "N/A") {
+          const employeeInfoArr = employeeName.split(": ");
+          const employeeNameArr = employeeInfoArr[1].split(", ");
+          selectedEmployee.id = employeeInfoArr[0];
+          selectedEmployee.first_name = employeeNameArr[1];
+          selectedEmployee.last_name = employeeNameArr[0];
+        } else {
+          selectedEmployee.id = null;
+          selectedEmployee.first_name = null;
+          selectedEmployee.last_name = null;
+        }
+      });
+
+    return selectedEmployee;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 const chooseDepartment = async () => {
