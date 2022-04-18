@@ -32,6 +32,7 @@ const managerMenu = async () => {
             'Add Employee',
             'Update Employee Role',
             'View All Roles',
+            'Add Role',
             'View All Departments',
             'Add Department',
             'Quit'
@@ -55,6 +56,8 @@ const managerMenu = async () => {
           await updateEmployee();
         } else if(task == 'View All Roles'){
           await viewAllRoles();
+        } else if(task == 'Add Role'){
+          await addRole();
         } else if(task == 'View All Departments'){
           await viewAllDepartments();
         } else if(task == 'Add Department'){
@@ -90,7 +93,7 @@ const viewAllEmployees = async () => {
 const viewAllRoles = async () => {
   try {
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = '/api/employees/roles/viewAll'
+    const route = '/api/employees/role/viewAll'
     const response = await axios.get(`${url}${route}`, {
       method: 'GET'
     })
@@ -131,7 +134,7 @@ const viewAllDepartments = async () => {
 
 const addEmployee = async () => {
   const employeeName = await promptEmployeeInfo();
-  const department = await chooseDepartment()
+  const department = await chooseDepartment();
   const role = await chooseRoles(department);
   const manager = await chooseManager(department);
 
@@ -155,8 +158,30 @@ const addEmployee = async () => {
   }
 }
 
+const addRole = async () => {
+  const role = await promptRoleInfo();
+  const department = await chooseDepartment();
+
+  try {
+    const bodyInfo = {
+      role_title: role.role_title,
+      role_salary: role.role_salary,
+      department_id: department.id,
+      department_name: department.name
+    }
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = '/api/employees/role/add'
+    const response = await axios.post(`${url}${route}`, {
+      ...bodyInfo
+    })
+    console.log(response.data.data.message)
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 const addDepartment = async () => {
-  const department = await promptDepartmentInfo()
+  const department = await promptDepartmentInfo();
 
   try {
     const bodyInfo = {
@@ -233,6 +258,43 @@ const promptEmployeeInfo = async () => {
       });
 
     return employeeInfo;
+}
+
+const promptRoleInfo = async () => {
+  let roleInfo = {}
+  await inquirer
+    .prompt([
+      {
+        name: "roleTitle",
+        type: "input",
+        message: "Role Title:",
+        validate: (answer) => {
+          if (answer) {
+            return true;
+          } else {
+            console.log("Please add Role Title.");
+          }
+        }
+      },
+      {
+        name: "roleSalary",
+        type: "input",
+        message: "Role Salary:",
+        validate: (answer) => {
+          if (answer && (Number.isInteger(parseFloat(answer)))) {
+            return true;
+          } else {
+            console.log("Please add Role Salary.");
+          }
+        }
+      },
+    ])
+    .then(async (data) => {
+      const { roleTitle, roleSalary } = data;
+      roleInfo.role_title = roleTitle;
+      roleInfo.role_salary = roleSalary;
+    });
+    return roleInfo;
 }
 
 const promptDepartmentInfo = async () => {
@@ -323,7 +385,7 @@ const chooseDepartment = async () => {
         {
           name: "deptName",
           type: "list",
-          message: "Employee's department for this role?",
+          message: "Department for this role?",
           choices: deptNames,
           validate: (answer) => {
             if (answer) {
@@ -351,7 +413,7 @@ const chooseRoles = async (department) => {
   try {
     let selectedRole = {};
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = `/api/employees/roles/byDepartment?id=${department.id}`
+    const route = `/api/employees/role/byDepartment?id=${department.id}`
     const response = await axios.get(`${url}${route}`, {
       method: 'GET'
     })
@@ -363,7 +425,7 @@ const chooseRoles = async (department) => {
         {
           name: "roleName",
           type: "list",
-          message: `Employee's role for ${department.name}?`,
+          message: `Role for ${department.name}?`,
           choices: roleNames,
           validate: (answer) => {
             if (answer) {
@@ -406,7 +468,7 @@ const chooseManager = async (department) => {
         {
           name: "managerName",
           type: "list",
-          message: `Employee's manager for ${department.name}?`,
+          message: `Manager for ${department.name}?`,
           choices: managerNames,
           validate: (answer) => {
             if (answer) {

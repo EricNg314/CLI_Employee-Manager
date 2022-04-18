@@ -5,7 +5,8 @@ const {
   getAllDepartments,
   getAllRolesByDept,
   getAllEmployeesByDept, 
-  addEmployee, 
+  addEmployee,
+  addRole,
   updateEmployee,
   getAllRoles, 
   addDepartment } = require('../../lib/employees')
@@ -62,8 +63,8 @@ router.get('/employees/departments/all', async function(req,res) {
   }
 })
 
-router.get('/employees/roles/viewAll', async function(req,res) {
-  console.log('entered route /api/roles/viewAll')
+router.get('/employees/role/viewAll', async function(req,res) {
+  console.log('entered route /api/employees/role/viewAll')
   const info = await getAllRoles();
   // console.log('info')
   console.log('info from getAllRoles:', info)
@@ -79,8 +80,28 @@ router.get('/employees/roles/viewAll', async function(req,res) {
   }
 })
 
-router.get('/employees/roles/byDepartment', async function(req,res) {
-  console.log('entered route /api/employees/roles/byDepartment')
+router.post('/employees/role/add', async function(req,res) {
+  console.log('entered route /api/employees/role/add')
+  console.log('req.body: ', req.body)
+  const info = await addRole(req.body);
+  // console.log('info')
+  console.log('info from addRole:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: {
+        message: `Added ${req.body.role_title} with ${req.body.role_salary} to ${req.body.department_name}`
+      }
+    });
+  }
+})
+
+router.get('/employees/role/byDepartment', async function(req,res) {
+  console.log('entered route /api/employees/role/byDepartment')
   console.log('req.query.id: ', req.query.id)
   const info = await getAllRolesByDept(req.query.id);
   // console.log('info')
