@@ -1,13 +1,13 @@
 const router = require('express').Router();
-const { getAllEmployees, getAllDepartments, getAllRolesByDept, getAllEmployeesByDept } = require('../../lib/employees')
+const { getAllEmployees, getAllDepartments, getAllRolesByDept, getAllEmployeesByDept, addEmployee } = require('../../lib/employees')
 
 router.get('/employees/viewAll', async function(req,res) {
-  console.log('entered route /employees/viewAll')
+  console.log('entered route /api/employees/viewAll')
   const info = await getAllEmployees();
   // console.log('info')
   console.log('info from getAllEmployees:', info)
-  console.log("info.message.includes('Error:'): ", info.message.includes('Error:'))
   if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
     res.status(500).json({error: info})
   } else {
     console.log("success")
@@ -19,12 +19,12 @@ router.get('/employees/viewAll', async function(req,res) {
 })
 
 router.get('/employees/departments/all', async function(req,res) {
-  console.log('entered route /employees/departments/all')
+  console.log('entered route /api/employees/departments/all')
   const info = await getAllDepartments();
   // console.log('info')
   console.log('info from getAllDepartments:', info)
-  console.log("info.message.includes('Error:'): ", info.message.includes('Error:'))
   if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
     res.status(500).json({error: info})
   } else {
     console.log("success")
@@ -36,13 +36,13 @@ router.get('/employees/departments/all', async function(req,res) {
 })
 
 router.get('/employees/roles/byDepartment', async function(req,res) {
-  console.log('entered route /employees/roles/byDepartment')
+  console.log('entered route /api/employees/roles/byDepartment')
   console.log('req.query.id: ', req.query.id)
   const info = await getAllRolesByDept(req.query.id);
   // console.log('info')
   console.log('info from getAllRolesByDept:', info)
-  console.log("info.message.includes('Error:'): ", info.message.includes('Error:'))
   if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
     res.status(500).json({error: info})
   } else {
     console.log("success")
@@ -55,13 +55,13 @@ router.get('/employees/roles/byDepartment', async function(req,res) {
 
 // TODO: Create get employees by department route.
 router.get('/employees/byDepartment', async function(req,res) {
-  console.log('entered route /employees/byDepartment')
+  console.log('entered route /api/employees/byDepartment')
   console.log('req.query.id: ', req.query.id)
   const info = await getAllEmployeesByDept(req.query.id);
   // console.log('info')
   console.log('info from getAllEmployeesByDept:', info)
-  console.log("info.message.includes('Error:'): ", info.message.includes('Error:'))
   if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
     res.status(500).json({error: info})
   } else {
     console.log("success")
@@ -72,22 +72,23 @@ router.get('/employees/byDepartment', async function(req,res) {
   }
 })
 
-// TODO: Create add employee route.
 router.post('/employees/add', async function(req,res) {
-  console.log('entered route /employees/viewAll')
-  const info = await getAllEmployees();
-  // console.log('info')
-  // console.log('info from getAllEmployees:', info)
-  // console.log("info.message.includes('Error:'): ", info.message.includes('Error:'))
-  // if(info.message.includes('Error:')){
-  //   res.status(500).json({error: info})
-  // } else {
-  //   console.log("success")
-  //   res.json({
-  //     message:'success',
-  //     data: info.response
-  //   });
-  // }
+  console.log('entered route /api/employees/add')
+  console.log('req.body: ', req.body)
+  const info = await addEmployee(req.body);
+  console.log('info from addEmployee:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: {
+        message: `Added ${req.body.first_name} ${req.body.last_name} to ${req.body.manager_name} as ${req.body.role_title}`
+      }
+    });
+  }
 })
 
 module.exports = router;
