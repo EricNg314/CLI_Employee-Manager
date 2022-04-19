@@ -38,6 +38,8 @@ const managerMenu = async () => {
             'Add Employee',
             'Add Role',
             'Add Department',
+            'Delete Employee',
+            'Delete Role',
             'Quit'
         ],
           validate: (answer) => {
@@ -71,6 +73,10 @@ const managerMenu = async () => {
           await addRole();
         } else if(task == 'Add Department'){
           await addDepartment();
+        } else if(task == 'Delete Employee'){
+          await deleteEmployee();
+        } else if(task == 'Delete Role'){
+          await deleteRole();
         } else if(task == 'Quit'){
           appIsRunning = false;
         }
@@ -304,6 +310,51 @@ const updateEmpManager = async () => {
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = '/api/employees/updateManager'
     const response = await axios.post(`${url}${route}`, {
+      ...bodyInfo
+    })
+    console.log(response.data.data.message)
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const deleteEmployee = async () => {
+  const employee = await chooseEmployee();
+
+  try {
+    const bodyInfo = {
+      data: {
+        employee_id: employee.id,
+        first_name: employee.first_name,
+        last_name: employee.last_name
+      }
+    }
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = `/api/employees/delete`
+    const response = await axios.delete(`${url}${route}`, {
+      ...bodyInfo
+    })
+    console.log(response.data.data.message)
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const deleteRole = async () => {
+  const department = await chooseDepartment();
+  const role = await chooseRoles(department);
+
+  try {
+    const bodyInfo = {
+      data: {
+        role_id: role.id,
+        title: role.title,
+        department_name: department.name
+      }
+    }
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = `/api/employees/role/delete`
+    const response = await axios.delete(`${url}${route}`, {
       ...bodyInfo
     })
     console.log(response.data.data.message)

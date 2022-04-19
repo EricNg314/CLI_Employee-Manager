@@ -7,11 +7,13 @@ const {
   getAllEmployeesByDept, 
   addEmployee,
   updateEmployee,
-  updateEmpManager } = require('../../lib/employees');
+  updateEmpManager,
+  deleteEmployee } = require('../../lib/employees');
 const { 
   getAllRolesByDept,
   addRole,
-  getAllRoles } = require('../../lib/role');
+  getAllRoles,
+  deleteRole } = require('../../lib/role');
 const { 
   getAllDepartments,
   addDepartment } = require('../../lib/department');
@@ -237,6 +239,44 @@ router.post('/employees/department/add', async function(req,res) {
       message:'success',
       data: {
         message: `Added ${req.body.first_name} ${req.body.last_name} to ${req.body.manager_name} as ${req.body.role_title}`
+      }
+    });
+  }
+})
+
+router.delete('/employees/delete', async function(req,res) {
+  console.log('entered route /api/employees/delete')
+  console.log('req.body: ', req.body)
+  const info = await deleteEmployee(req.body.employee_id);
+  console.log('info from deleteEmployee:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: {
+        message: `Deleted employee id: ${req.body.first_name} ${req.body.last_name}.`
+      }
+    });
+  }
+})
+
+router.delete('/employees/role/delete', async function(req,res) {
+  console.log('entered route /api/employees/role/delete')
+  console.log('req.body: ', req.body)
+  const info = await deleteRole(req.body.role_id);
+  console.log('info from deleteRole:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: {
+        message: `Deleted role: ${req.body.title} from ${req.body.department_name}.`
       }
     });
   }
