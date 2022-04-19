@@ -80,15 +80,19 @@ const viewAllEmployees = async () => {
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = '/api/employees/viewAll'
     const response = await axios.get(`${url}${route}`)
-    const headers = Object.keys(response.data.data[0])
-    const table = new Table({
-      head: headers
-    });
-    response.data.data.forEach(row => {
-      const rowValues = Object.keys(row).map((key) => row[key])
-      table.push(rowValues);
-    });
-    console.log(table.toString())
+    if (response.data.data.length > 0){
+      const headers = Object.keys(response.data.data[0])
+      const table = new Table({
+        head: headers
+      });
+      response.data.data.forEach(row => {
+        const rowValues = Object.keys(row).map((key) => row[key])
+        table.push(rowValues);
+      });
+      console.log(table.toString())
+    } else {
+      console.log("No employees found.")
+    }
   } catch (err) {
     console.error(err);
   }
@@ -102,15 +106,19 @@ const viewEmployeeByManager = async () => {
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = `/api/employees/viewManagerEmployees?id=${manager.id}`
     const response = await axios.get(`${url}${route}`)
-    const headers = Object.keys(response.data.data[0])
-    const table = new Table({
-      head: headers
-    });
-    response.data.data.forEach(row => {
-      const rowValues = Object.keys(row).map((key) => row[key])
-      table.push(rowValues);
-    });
-    console.log(table.toString())
+    if (response.data.data.length > 0){
+      const headers = Object.keys(response.data.data[0])
+      const table = new Table({
+        head: headers
+      });
+      response.data.data.forEach(row => {
+        const rowValues = Object.keys(row).map((key) => row[key])
+        table.push(rowValues);
+      });
+      console.log(table.toString())
+    } else {
+      console.log(`No employees for ${manager.first_name} ${manager.last_name} found.`)
+    }
   } catch (err) {
     console.error(err);
   }
@@ -121,15 +129,19 @@ const viewAllRoles = async () => {
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = '/api/employees/role/viewAll'
     const response = await axios.get(`${url}${route}`)
-    const headers = Object.keys(response.data.data[0])
-    const table = new Table({
-      head: headers
-    });
-    response.data.data.forEach(row => {
-      const rowValues = Object.keys(row).map((key) => row[key])
-      table.push(rowValues);
-    });
-    console.log(table.toString())
+    if (response.data.data.length > 0){
+      const headers = Object.keys(response.data.data[0])
+      const table = new Table({
+        head: headers
+      });
+      response.data.data.forEach(row => {
+        const rowValues = Object.keys(row).map((key) => row[key])
+        table.push(rowValues);
+      });
+      console.log(table.toString())
+    } else {
+      console.log("No roles found.")
+    }
   } catch (err) {
     console.error(err);
   }
@@ -140,15 +152,19 @@ const viewAllDepartments = async () => {
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = '/api/employees/departments/all'
     const response = await axios.get(`${url}${route}`)
-    const headers = Object.keys(response.data.data[0])
-    const table = new Table({
-      head: headers
-    });
-    response.data.data.forEach(row => {
-      const rowValues = Object.keys(row).map((key) => row[key])
-      table.push(rowValues);
-    });
-    console.log(table.toString())
+    if (response.data.data.length > 0){
+      const headers = Object.keys(response.data.data[0])
+      const table = new Table({
+        head: headers
+      });
+      response.data.data.forEach(row => {
+        const rowValues = Object.keys(row).map((key) => row[key])
+        table.push(rowValues);
+      });
+      console.log(table.toString())
+    } else {
+      console.log("No departments found.")
+    }
   } catch (err) {
     console.error(err);
   }
