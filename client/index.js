@@ -29,14 +29,14 @@ const managerMenu = async () => {
           message: "What would you like to do?",
           choices: [
             'View All Employees',
+            'View All Roles',
+            'View All Departments',
             'View Employee By Manager',
             'View Employee By Department',
-            'Add Employee',
             'Update Employee Role',
             'Update Employee Manager',
-            'View All Roles',
+            'Add Employee',
             'Add Role',
-            'View All Departments',
             'Add Department',
             'Quit'
         ],
@@ -53,22 +53,22 @@ const managerMenu = async () => {
         const { task } = data;
         if(task == 'View All Employees'){
           await viewAllEmployees();
+        } else if(task == 'View All Roles'){
+          await viewAllRoles();
+        } else if(task == 'View All Departments'){
+          await viewAllDepartments();
         } else if(task == 'View Employee By Manager'){
           await viewEmployeeByManager();
         } else if(task == 'View Employee By Department'){
           await viewEmployeeByDept();
-        } else if(task == 'Add Employee'){
-          await addEmployee();
         } else if(task == 'Update Employee Role'){
           await updateEmployee();
         } else if(task == 'Update Employee Manager'){
           await updateEmpManager();
-        } else if(task == 'View All Roles'){
-          await viewAllRoles();
+        } else if(task == 'Add Employee'){
+          await addEmployee();
         } else if(task == 'Add Role'){
           await addRole();
-        } else if(task == 'View All Departments'){
-          await viewAllDepartments();
         } else if(task == 'Add Department'){
           await addDepartment();
         } else if(task == 'Quit'){
