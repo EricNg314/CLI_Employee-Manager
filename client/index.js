@@ -31,6 +31,7 @@ const managerMenu = async () => {
             'View All Employees',
             'Add Employee',
             'Update Employee Role',
+            'Update Employee Manager',
             'View All Roles',
             'Add Role',
             'View All Departments',
@@ -54,6 +55,8 @@ const managerMenu = async () => {
           await addEmployee();
         } else if(task == 'Update Employee Role'){
           await updateEmployee();
+        } else if(task == 'Update Employee Manager'){
+          await updateEmpManager();
         } else if(task == 'View All Roles'){
           await viewAllRoles();
         } else if(task == 'Add Role'){
@@ -221,6 +224,31 @@ const updateEmployee = async () => {
     console.error(err);
   }
 }
+
+const updateEmpManager = async () => {
+  const employee = await chooseEmployee();
+  const department = await chooseDepartment();
+  const manager = await chooseManager(department);
+
+  try {
+    const bodyInfo = {
+      employee_id: employee.id,
+      first_name: employee.first_name,
+      last_name: employee.last_name,
+      manager_id: manager.id,
+      manager_name: manager.first_name + " " + manager.last_name,
+    }
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = '/api/employees/updateManager'
+    const response = await axios.post(`${url}${route}`, {
+      ...bodyInfo
+    })
+    console.log(response.data.data.message)
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 
 const promptEmployeeInfo = async () => {
   let employeeInfo = {}

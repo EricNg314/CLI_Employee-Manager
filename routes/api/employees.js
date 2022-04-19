@@ -4,7 +4,8 @@ const {
   getAllEmployees,
   getAllEmployeesByDept, 
   addEmployee,
-  updateEmployee } = require('../../lib/employees');
+  updateEmployee,
+  updateEmpManager } = require('../../lib/employees');
 const { 
   getAllRolesByDept,
   addRole,
@@ -162,6 +163,25 @@ router.post('/employees/update', async function(req,res) {
   console.log('req.body: ', req.body)
   const info = await updateEmployee(req.body);
   console.log('info from updateEmployee:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: {
+        message: `Updated ${req.body.first_name} ${req.body.last_name} as ${req.body.role_title}`
+      }
+    });
+  }
+})
+
+router.post('/employees/updateManager', async function(req,res) {
+  console.log('entered route /api/employees/updateManager')
+  console.log('req.body: ', req.body)
+  const info = await updateEmpManager(req.body);
+  console.log('info from updateEmpManager:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
     res.status(500).json({error: info})
