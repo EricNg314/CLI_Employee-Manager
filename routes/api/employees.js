@@ -2,14 +2,16 @@ const router = require('express').Router();
 const { 
   viewAllEmployees,
   getAllEmployees,
-  getAllDepartments,
-  getAllRolesByDept,
   getAllEmployeesByDept, 
   addEmployee,
+  updateEmployee } = require('../../lib/employees');
+const { 
+  getAllRolesByDept,
   addRole,
-  updateEmployee,
-  getAllRoles, 
-  addDepartment } = require('../../lib/employees')
+  getAllRoles } = require('../../lib/role');
+const { 
+  getAllDepartments,
+  addDepartment } = require('../../lib/department');
 
 // viewAll route includes details full details.
 router.get('/employees/viewAll', async function(req,res) {
