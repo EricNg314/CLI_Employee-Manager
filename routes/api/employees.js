@@ -20,7 +20,6 @@ const {
 router.get('/employees/viewAll', async function(req,res) {
   console.log('entered route /api/employees/viewAll')
   const info = await viewAllEmployees();
-  // console.log('info')
   console.log('info from viewAllEmployees:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
@@ -37,7 +36,6 @@ router.get('/employees/viewAll', async function(req,res) {
 router.get('/employees/viewManagerEmployees', async function(req,res) {
   console.log('entered route /api/employees/viewManagerEmployees')
   const info = await viewManagerEmployees(req.query.id);
-  // console.log('info')
   console.log('info from viewManagerEmployees:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
@@ -54,7 +52,6 @@ router.get('/employees/viewManagerEmployees', async function(req,res) {
 router.get('/employees/viewDepartmentEmployees', async function(req,res) {
   console.log('entered route /api/employees/viewDepartmentEmployees')
   const info = await viewDeptEmployees(req.query.id);
-  // console.log('info')
   console.log('info from viewDeptEmployees:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
@@ -71,7 +68,6 @@ router.get('/employees/viewDepartmentEmployees', async function(req,res) {
 router.get('/employees/all', async function(req,res) {
   console.log('entered route /api/employees/all')
   const info = await getAllEmployees();
-  // console.log('info')
   console.log('info from getAllEmployees:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
@@ -88,7 +84,6 @@ router.get('/employees/all', async function(req,res) {
 router.get('/employees/departments/all', async function(req,res) {
   console.log('entered route /api/employees/departments/all')
   const info = await getAllDepartments();
-  // console.log('info')
   console.log('info from getAllDepartments:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
@@ -105,7 +100,6 @@ router.get('/employees/departments/all', async function(req,res) {
 router.get('/employees/role/viewAll', async function(req,res) {
   console.log('entered route /api/employees/role/viewAll')
   const info = await getAllRoles();
-  // console.log('info')
   console.log('info from getAllRoles:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
@@ -123,7 +117,6 @@ router.post('/employees/role/add', async function(req,res) {
   console.log('entered route /api/employees/role/add')
   console.log('req.body: ', req.body)
   const info = await addRole(req.body);
-  // console.log('info')
   console.log('info from addRole:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
@@ -143,7 +136,6 @@ router.get('/employees/role/byDepartment', async function(req,res) {
   console.log('entered route /api/employees/role/byDepartment')
   console.log('req.query.id: ', req.query.id)
   const info = await getAllRolesByDept(req.query.id);
-  // console.log('info')
   console.log('info from getAllRolesByDept:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
@@ -161,7 +153,6 @@ router.get('/employees/byDepartment', async function(req,res) {
   console.log('entered route /api/employees/byDepartment')
   console.log('req.query.id: ', req.query.id)
   const info = await getAllEmployeesByDept(req.query.id);
-  // console.log('info')
   console.log('info from getAllEmployeesByDept:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
