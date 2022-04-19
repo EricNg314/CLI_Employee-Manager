@@ -40,6 +40,7 @@ const managerMenu = async () => {
             'Add Department',
             'Delete Employee',
             'Delete Role',
+            'Delete Department',
             'Quit'
         ],
           validate: (answer) => {
@@ -77,6 +78,8 @@ const managerMenu = async () => {
           await deleteEmployee();
         } else if(task == 'Delete Role'){
           await deleteRole();
+        } else if(task == 'Delete Department'){
+          await deleteDepartment();
         } else if(task == 'Quit'){
           appIsRunning = false;
         }
@@ -363,6 +366,26 @@ const deleteRole = async () => {
   }
 }
 
+const deleteDepartment = async () => {
+  const department = await chooseDepartment();
+
+  try {
+    const bodyInfo = {
+      data: {
+        department_id: department.id,
+        department_name: department.name
+      }
+    }
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = `/api/employees/department/delete`
+    const response = await axios.delete(`${url}${route}`, {
+      ...bodyInfo
+    })
+    console.log(response.data.data.message)
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 const promptEmployeeInfo = async () => {
   let employeeInfo = {}

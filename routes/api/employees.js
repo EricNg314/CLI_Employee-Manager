@@ -16,7 +16,8 @@ const {
   deleteRole } = require('../../lib/role');
 const { 
   getAllDepartments,
-  addDepartment } = require('../../lib/department');
+  addDepartment,
+  deleteDepartment } = require('../../lib/department');
 
 // viewAll route includes details full details.
 router.get('/employees/viewAll', async function(req,res) {
@@ -277,6 +278,25 @@ router.delete('/employees/role/delete', async function(req,res) {
       message:'success',
       data: {
         message: `Deleted role: ${req.body.title} from ${req.body.department_name}.`
+      }
+    });
+  }
+})
+
+router.delete('/employees/department/delete', async function(req,res) {
+  console.log('entered route /api/employees/department/delete')
+  console.log('req.body: ', req.body)
+  const info = await deleteDepartment(req.body.department_id);
+  console.log('info from deleteDepartment:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: {
+        message: `Deleted department: ${req.body.department_name}.`
       }
     });
   }
