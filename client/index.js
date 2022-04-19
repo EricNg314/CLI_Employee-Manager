@@ -11,11 +11,11 @@ async function initializeApp() {
   ----------------------------`)
   await managerMenu();
   console.log(`
-  ----------------------------
+  --------------------------------------------------
   
       Thank you for using CLI_Employee-Manager.
   
-  ----------------------------`)
+  --------------------------------------------------`)
 }
 
 const managerMenu = async () => {
@@ -33,6 +33,7 @@ const managerMenu = async () => {
             'View All Departments',
             'View Employee By Manager',
             'View Employee By Department',
+            'View Total Budget By Department',
             'Update Employee Role',
             'Update Employee Manager',
             'Add Employee',
@@ -64,6 +65,8 @@ const managerMenu = async () => {
           await viewEmployeeByManager();
         } else if(task == 'View Employee By Department'){
           await viewEmployeeByDept();
+        } else if(task == 'View Total Budget By Department'){
+          await viewTotalBudgetByDept();
         } else if(task == 'Update Employee Role'){
           await updateEmployee();
         } else if(task == 'Update Employee Manager'){
@@ -201,6 +204,31 @@ const viewAllDepartments = async () => {
       console.log(table.toString())
     } else {
       console.log("No departments found.")
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const viewTotalBudgetByDept = async () => {
+  const department = await chooseDepartment();
+
+  try {
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = `/api/employees/department/totalBudget?id=${department.id}`
+    const response = await axios.get(`${url}${route}`)
+    if (response.data.data.length > 0){
+      const headers = Object.keys(response.data.data[0])
+      const table = new Table({
+        head: headers
+      });
+      response.data.data.forEach(row => {
+        const rowValues = Object.keys(row).map((key) => row[key])
+        table.push(rowValues);
+      });
+      console.log(table.toString())
+    } else {
+      console.log(`No expenses for ${department} found.`)
     }
   } catch (err) {
     console.error(err);

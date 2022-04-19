@@ -16,6 +16,7 @@ const {
   deleteRole } = require('../../lib/role');
 const { 
   getAllDepartments,
+  getBudgetByDept,
   addDepartment,
   deleteDepartment } = require('../../lib/department');
 
@@ -157,6 +158,23 @@ router.get('/employees/byDepartment', async function(req,res) {
   console.log('req.query.id: ', req.query.id)
   const info = await getAllEmployeesByDept(req.query.id);
   console.log('info from getAllEmployeesByDept:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: info.response
+    });
+  }
+})
+
+router.get('/employees/department/totalBudget', async function(req,res) {
+  console.log('entered route /api/employees/department/totalBudget')
+  console.log('req.query.id: ', req.query.id)
+  const info = await getBudgetByDept(req.query.id);
+  console.log('info from getBudgetByDept:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
     res.status(500).json({error: info})
