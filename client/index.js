@@ -29,6 +29,7 @@ const managerMenu = async () => {
           message: "What would you like to do?",
           choices: [
             'View All Employees',
+            'View Employee By Manager',
             'Add Employee',
             'Update Employee Role',
             'Update Employee Manager',
@@ -51,6 +52,8 @@ const managerMenu = async () => {
         const { task } = data;
         if(task == 'View All Employees'){
           await viewAllEmployees();
+        } else if(task == 'View Employee By Manager'){
+          await viewEmployeeByManager();
         } else if(task == 'Add Employee'){
           await addEmployee();
         } else if(task == 'Update Employee Role'){
@@ -76,9 +79,29 @@ const viewAllEmployees = async () => {
   try {
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = '/api/employees/viewAll'
-    const response = await axios.get(`${url}${route}`, {
-      method: 'GET'
-    })
+    const response = await axios.get(`${url}${route}`)
+    const headers = Object.keys(response.data.data[0])
+    const table = new Table({
+      head: headers
+    });
+    response.data.data.forEach(row => {
+      const rowValues = Object.keys(row).map((key) => row[key])
+      table.push(rowValues);
+    });
+    console.log(table.toString())
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const viewEmployeeByManager = async () => {
+  const department = await chooseDepartment();
+  const manager = await chooseManager(department);
+
+  try {
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = `/api/employees/viewManagerEmployees?id=${manager.id}`
+    const response = await axios.get(`${url}${route}`)
     const headers = Object.keys(response.data.data[0])
     const table = new Table({
       head: headers
@@ -97,9 +120,7 @@ const viewAllRoles = async () => {
   try {
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = '/api/employees/role/viewAll'
-    const response = await axios.get(`${url}${route}`, {
-      method: 'GET'
-    })
+    const response = await axios.get(`${url}${route}`)
     const headers = Object.keys(response.data.data[0])
     const table = new Table({
       head: headers
@@ -118,9 +139,7 @@ const viewAllDepartments = async () => {
   try {
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = '/api/employees/departments/all'
-    const response = await axios.get(`${url}${route}`, {
-      method: 'GET'
-    })
+    const response = await axios.get(`${url}${route}`)
     const headers = Object.keys(response.data.data[0])
     const table = new Table({
       head: headers
@@ -354,9 +373,7 @@ const chooseEmployee = async () => {
     let selectedEmployee = {};
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = '/api/employees/all'
-    const response = await axios.get(`${url}${route}`, {
-      method: 'GET'
-    })
+    const response = await axios.get(`${url}${route}`)
     const employeeList = response.data.data
     const employeeNames = employeeList.map(employeeInfo => `${employeeInfo['id']}: ${employeeInfo['last_name']}, ${employeeInfo['first_name']}`);
     
@@ -402,9 +419,7 @@ const chooseDepartment = async () => {
     let selectedDept = {};
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = '/api/employees/departments/all'
-    const response = await axios.get(`${url}${route}`, {
-      method: 'GET'
-    })
+    const response = await axios.get(`${url}${route}`)
     const deptList = response.data.data
     const deptNames = deptList.map(deptInfo => `${deptInfo['id']}: ${deptInfo['name']}`);
     
@@ -442,9 +457,7 @@ const chooseRoles = async (department) => {
     let selectedRole = {};
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = `/api/employees/role/byDepartment?id=${department.id}`
-    const response = await axios.get(`${url}${route}`, {
-      method: 'GET'
-    })
+    const response = await axios.get(`${url}${route}`)
     const roleList = response.data.data
     const roleNames = roleList.map(roleInfo => `${roleInfo['id']}: ${roleInfo['title']}`);
     
@@ -482,9 +495,7 @@ const chooseManager = async (department) => {
     let selectedManager = {};
     const url = process.env.DB_URL || 'http://localhost:3001';
     const route = `/api/employees/byDepartment?id=${department.id}`
-    const response = await axios.get(`${url}${route}`, {
-      method: 'GET'
-    })
+    const response = await axios.get(`${url}${route}`)
     const managerList = response.data.data
     const managerNames = managerList.map(managerInfo => 
       `${managerInfo['employee_id']}: ${managerInfo['last_name']}, ${managerInfo['first_name']}`
