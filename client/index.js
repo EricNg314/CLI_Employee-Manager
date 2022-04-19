@@ -30,6 +30,7 @@ const managerMenu = async () => {
           choices: [
             'View All Employees',
             'View Employee By Manager',
+            'View Employee By Department',
             'Add Employee',
             'Update Employee Role',
             'Update Employee Manager',
@@ -54,6 +55,8 @@ const managerMenu = async () => {
           await viewAllEmployees();
         } else if(task == 'View Employee By Manager'){
           await viewEmployeeByManager();
+        } else if(task == 'View Employee By Department'){
+          await viewEmployeeByDept();
         } else if(task == 'Add Employee'){
           await addEmployee();
         } else if(task == 'Update Employee Role'){
@@ -118,6 +121,31 @@ const viewEmployeeByManager = async () => {
       console.log(table.toString())
     } else {
       console.log(`No employees for ${manager.first_name} ${manager.last_name} found.`)
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const viewEmployeeByDept = async () => {
+  const department = await chooseDepartment();
+
+  try {
+    const url = process.env.DB_URL || 'http://localhost:3001';
+    const route = `/api/employees/viewDepartmentEmployees?id=${department.id}`
+    const response = await axios.get(`${url}${route}`)
+    if (response.data.data.length > 0){
+      const headers = Object.keys(response.data.data[0])
+      const table = new Table({
+        head: headers
+      });
+      response.data.data.forEach(row => {
+        const rowValues = Object.keys(row).map((key) => row[key])
+        table.push(rowValues);
+      });
+      console.log(table.toString())
+    } else {
+      console.log(`No employees for ${department.name} found.`)
     }
   } catch (err) {
     console.error(err);

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { 
   viewAllEmployees,
   viewManagerEmployees,
+  viewDeptEmployees,
   getAllEmployees,
   getAllEmployeesByDept, 
   addEmployee,
@@ -38,6 +39,23 @@ router.get('/employees/viewManagerEmployees', async function(req,res) {
   const info = await viewManagerEmployees(req.query.id);
   // console.log('info')
   console.log('info from viewManagerEmployees:', info)
+  if(info.message.includes('Error:')){
+    console.error("Error info: ", info)
+    res.status(500).json({error: info})
+  } else {
+    console.log("success")
+    res.json({
+      message:'success',
+      data: info.response
+    });
+  }
+})
+
+router.get('/employees/viewDepartmentEmployees', async function(req,res) {
+  console.log('entered route /api/employees/viewDepartmentEmployees')
+  const info = await viewDeptEmployees(req.query.id);
+  // console.log('info')
+  console.log('info from viewDeptEmployees:', info)
   if(info.message.includes('Error:')){
     console.error("Error info: ", info)
     res.status(500).json({error: info})
