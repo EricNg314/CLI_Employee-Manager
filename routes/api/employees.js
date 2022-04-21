@@ -143,7 +143,7 @@ router.post('/employees/updateManager', async function(req,res) {
     res.json({
       message:'success',
       data: {
-        message: `Updated ${req.body.first_name} ${req.body.last_name} as ${req.body.role_title}`
+        message: `Updated ${req.body.first_name} ${req.body.last_name} as ${req.body.manager_name}`
       }
     });
   }

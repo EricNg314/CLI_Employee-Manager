@@ -52,7 +52,7 @@ router.post('/departments/add', async function(req,res) {
     res.json({
       message:'success',
       data: {
-        message: `Added ${req.body.first_name} ${req.body.last_name} to ${req.body.manager_name} as ${req.body.role_title}`
+        message: `Added department ${req.body.department_name}.`
       }
     });
   }
