@@ -58,8 +58,11 @@ Command line application to help manage organization of employees.
 | [Node.js](https://nodejs.org/en/) | Runtime Environment | An open source server environment. |
 | [NPM - nodemon](https://www.npmjs.com/package/nodemon) | Module | Is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected. |
 | [NPM - express](https://www.npmjs.com/package/express) | Module | A node package for creating a web framework in node. |
+| [NPM - axios](https://www.npmjs.com/package/axios) | Module | Promise based HTTP client for the browser and node.js |
 | [NPM - inquirer](https://www.npmjs.com/package/inquirer) | Module | Inquirer.js should ease the process of providing error feedback, asking questions, parsing input, validating answers, managing hierarchical prompts. |
-| [NPM - mysql2](https://www.npmjs.com/package/mysql2) | Database | An updated version of the [MySQL](https://www.npmjs.com/package/mysql) package required for Sequelize package. |
+| [NPM - mysql2](https://www.npmjs.com/package/mysql2) | Database | Client for Node.js with focus on performance. Supports prepared statements, non-utf8 encodings, binary log protocol, compression, ssl and more. |
+| [NPM - cli-table3](https://www.npmjs.com/package/cli-table3) | Module | Allows you to render unicode-aided tables on the command line from your node.js scripts. |
+| [NPM - dotenv](https://www.npmjs.com/package/cli-table3) | Module | A zero-dependency module that loads environment variables from a .env file into process.env. |
 
 
 
