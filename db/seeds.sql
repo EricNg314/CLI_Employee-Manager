@@ -21,7 +21,7 @@ VALUES
   ('Paul', 'Cézanne', 2),
   ('Pierre-Auguste', 'Renoir', 4),
   ('Morty', '304-X', 1),
-  ('Rick', 'C-137', 5);
+  ('Rick', 'C-137', 6);
 
 -- Adding employees
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
