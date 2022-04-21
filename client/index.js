@@ -167,7 +167,7 @@ const viewEmployeeByDept = async () => {
 const viewAllRoles = async () => {
   try {
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = '/api/employees/role/viewAll'
+    const route = '/api/roles/viewAll'
     const response = await axios.get(`${url}${route}`)
     if (response.data.data.length > 0){
       const headers = Object.keys(response.data.data[0])
@@ -190,7 +190,7 @@ const viewAllRoles = async () => {
 const viewAllDepartments = async () => {
   try {
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = '/api/employees/departments/all'
+    const route = '/api/departments/all'
     const response = await axios.get(`${url}${route}`)
     if (response.data.data.length > 0){
       const headers = Object.keys(response.data.data[0])
@@ -215,7 +215,7 @@ const viewTotalBudgetByDept = async () => {
 
   try {
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = `/api/employees/department/totalBudget?id=${department.id}`
+    const route = `/api/departments/totalBudget?id=${department.id}`
     const response = await axios.get(`${url}${route}`)
     if (response.data.data.length > 0){
       const headers = Object.keys(response.data.data[0])
@@ -273,7 +273,7 @@ const addRole = async () => {
       department_name: department.name
     }
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = '/api/employees/role/add'
+    const route = '/api/roles/add'
     const response = await axios.post(`${url}${route}`, {
       ...bodyInfo
     })
@@ -291,7 +291,7 @@ const addDepartment = async () => {
       department_name: department.department_name
     }
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = '/api/employees/department/add'
+    const route = '/api/departments/add'
     const response = await axios.post(`${url}${route}`, {
       ...bodyInfo
     })
@@ -384,7 +384,7 @@ const deleteRole = async () => {
       }
     }
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = `/api/employees/role/delete`
+    const route = `/api/roles/delete`
     const response = await axios.delete(`${url}${route}`, {
       ...bodyInfo
     })
@@ -405,7 +405,7 @@ const deleteDepartment = async () => {
       }
     }
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = `/api/employees/department/delete`
+    const route = `/api/departments/delete`
     const response = await axios.delete(`${url}${route}`, {
       ...bodyInfo
     })
@@ -564,7 +564,7 @@ const chooseDepartment = async () => {
   try {
     let selectedDept = {};
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = '/api/employees/departments/all'
+    const route = '/api/departments/all'
     const response = await axios.get(`${url}${route}`)
     const deptList = response.data.data
     const deptNames = deptList.map(deptInfo => `${deptInfo['id']}: ${deptInfo['name']}`);
@@ -574,7 +574,7 @@ const chooseDepartment = async () => {
         {
           name: "deptName",
           type: "list",
-          message: "Department for this role?",
+          message: "Select Department.",
           choices: deptNames,
           validate: (answer) => {
             if (answer) {
@@ -602,7 +602,7 @@ const chooseRoles = async (department) => {
   try {
     let selectedRole = {};
     const url = process.env.DB_URL || 'http://localhost:3001';
-    const route = `/api/employees/role/byDepartment?id=${department.id}`
+    const route = `/api/roles/byDepartment?id=${department.id}`
     const response = await axios.get(`${url}${route}`)
     const roleList = response.data.data
     const roleNames = roleList.map(roleInfo => `${roleInfo['id']}: ${roleInfo['title']}`);
@@ -612,7 +612,7 @@ const chooseRoles = async (department) => {
         {
           name: "roleName",
           type: "list",
-          message: `Role for ${department.name}?`,
+          message: `Select Role within ${department.name}?`,
           choices: roleNames,
           validate: (answer) => {
             if (answer) {
@@ -653,7 +653,7 @@ const chooseManager = async (department) => {
         {
           name: "managerName",
           type: "list",
-          message: `Manager for ${department.name}?`,
+          message: `Select Manager within ${department.name}?`,
           choices: managerNames,
           validate: (answer) => {
             if (answer) {
